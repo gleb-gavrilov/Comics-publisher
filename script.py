@@ -57,24 +57,24 @@ def check_status(response):
         raise requests.exceptions.HTTPError(response.json()['error'])
 
 
-def upload_photo(upload_url, img_path):
+def upload_photo(uploaded_url, img_path):
     with open(img_path, 'rb') as file:
         files ={
             'photo': file
         }
-        response = requests.post(upload_url, files=files)
+        response = requests.post(uploaded_url, files=files)
         response.raise_for_status()
     return response.json()
 
 
-def save_photo(upload_image_info):
+def save_photo(uploaded_image_info):
     data = {
         'access_token': os.getenv('access_token'),
         'group_id': os.getenv('group_id'),
         'v': 5.103,
-        'server': upload_image_info['server'],
-        'photo': upload_image_info['photo'],
-        'hash': upload_image_info['hash']
+        'server': uploaded_image_info['server'],
+        'photo': uploaded_image_info['photo'],
+        'hash': uploaded_image_info['hash']
     }
     response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', data=data)
     response.raise_for_status()
@@ -108,10 +108,10 @@ def main():
         comics_id = random.randint(1, last_comics_id)
         comics_info = get_content(f'https://xkcd.com/{comics_id}/info.0.json')
         img_path = download_image(comics_info['img'], comics_id)
-        upload_url = get_upload_url()
-        upload_image_info = upload_photo(upload_url, img_path)
-        result_save_photo = save_photo(upload_image_info)
-        result_publish = publish_photo(result_save_photo, comics_info['alt'])
+        uploaded_url = get_upload_url()
+        uploaded_image_info = upload_photo(uploaded_url, img_path)
+        result_save_photo = save_photo(uploaded_image_info)
+        publish_photo(result_save_photo, comics_info['alt'])
     except requests.exceptions.HTTPError as error:
         print(f'Can`t get data:\n{error}')
     finally:
