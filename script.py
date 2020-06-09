@@ -48,7 +48,13 @@ def get_upload_url():
     }
     response = requests.get('https://api.vk.com/method/photos.getWallUploadServer', params=params)
     response.raise_for_status()
+    check_status(response)
     return response.json()['response']['upload_url']
+
+
+def check_status(response):
+    if 'error' in response.json():
+        raise requests.exceptions.HTTPError(response.json()['error'])
 
 
 def upload_photo(upload_url, img_path):
@@ -72,6 +78,7 @@ def save_photo(upload_image_info):
     }
     response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', data=data)
     response.raise_for_status()
+    check_status(response)
     return response.json()
 
 
@@ -88,6 +95,7 @@ def publish_photo(result_save_photo, message):
     }
     response = requests.post('https://api.vk.com/method/wall.post', data=data)
     response.raise_for_status()
+    check_status(response)
     return response.json()
 
 
