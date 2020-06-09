@@ -112,9 +112,10 @@ def main():
         upload_image_info = upload_photo(upload_url, img_path)
         result_save_photo = save_photo(upload_image_info)
         result_publish = publish_photo(result_save_photo, comics_info['alt'])
-        os.remove(img_path)
     except requests.exceptions.HTTPError as error:
         print(f'Can`t get data:\n{error}')
+    finally:
+        os.remove(img_path)
 
 
 if __name__ == '__main__':
