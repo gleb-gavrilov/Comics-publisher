@@ -100,6 +100,8 @@ def publish_photo(result_save_photo, message):
 
 
 def main():
+    load_dotenv()
+    random.seed()
     create_default_folder()
     try:
         last_comics_id = get_last_comics_id()
@@ -116,6 +118,4 @@ def main():
 
 
 if __name__ == '__main__':
-    load_dotenv()
-    random.seed()
     main()
