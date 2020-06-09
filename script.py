@@ -30,7 +30,7 @@ def get_file_extension(file_name):
     return os.path.splitext(file_name)[-1]
 
 
-def create_default_folders():
+def create_default_folder():
     Path('images').mkdir(parents=True, exist_ok=True)
 
 
@@ -92,7 +92,7 @@ def publish_photo(result_save_photo, message):
 
 
 def main():
-    create_default_folders()
+    create_default_folder()
     try:
         last_comics_id = get_last_comics_id()
         comics_id = random.randint(1, last_comics_id)
